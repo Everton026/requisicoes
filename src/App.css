@@ -1,38 +1,24 @@
-.App {
-  text-align: center;
-}
+@import url("https://fonts.googleapis.com/css2?family=Alkatra&display=swap");
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+    font-family: "Alkatra", cursive;
+    background-color: #222;
+    color: #bebebf;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+::-webkit-scrollbar{
+    width: 8px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+::-webkit-scrollbar-track{
+    background-color: #757575;
 }
-
-.App-link {
-  color: #61dafb;
+::-webkit-scrollbar-thumb{
+    background-color: #101;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.pkmon {
+    font-size: 20px;
+}
+.pkmon img {
+    border-radius: 50%;
+    padding: 27px;
+    background: linear-gradient(#d2d829, #ed5636, rgb(154, 22, 154)) padding-box;
 }
