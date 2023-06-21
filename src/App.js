@@ -8,19 +8,22 @@ function App() {
 
 	const [pokemons, setPokemons] = useState([]);
 	const [txtPokemon, setTxtPokemon] = useState("");
+  const [pokemonSelecionado, setPokSelecionado] = useState(null)
 
 
 	function buscaPokemon(){
     if(!txtPokemon.trim()){
+      toast("Digite o Nome de um Pokémon!")
       buscaTodosPokemons()
       return;
     }
 		axios.get(`https://pokeapi.co/api/v2/pokemon/${txtPokemon}`)
 		.then(resposta => { 
       setPokemons([resposta.data])
+      toast("✔ Pokemon Encontrado!")
 		})
 		.catch(resposta=> {
-      toast("Pokémon Não Encontrado!✖");
+      toast("❌ Pokémon Não Encontrado!");
 		})
 	}
 
@@ -28,10 +31,11 @@ function App() {
 		// pokemon 			-> busca todos pokemons
 		// pokemon?limit=X  -> busca todos com um numero limite
 		// pokemon/nome 	-> busca um pokemon específico
-		axios.get("https://pokeapi.co/api/v2/pokemon?limit=75")
+		axios.get("https://pokeapi.co/api/v2/pokemon?limit=500")
 		.then(response => { // Será executado quando a requisição terminar
 			console.log("Requisição bem sucedida!");
 			setPokemons(response.data.results);
+      console.log(response)
 		})
 		.catch(response => { // É executado quando dá erro na requisição
 			console.log("Deu ruim na requisição");
@@ -41,48 +45,65 @@ function App() {
 	React.useEffect(()=>{
 		buscaTodosPokemons();
 	}, [])
+
+  function mostrarPk(url) {
+    setPokSelecionado(url)
+  }
  
   return (
-    <div>
-      <h1>Everton PokéDex</h1>
-		  <p>Conheça os Pokémons mais famosos</p>
-      <input onChange={(e)=>setTxtPokemon(e.target.value)} placeholder="Digite o nome de um Pokémon"/>
-      <button onClick={()=>buscaPokemon()}>Buscar</button>
+    <div className='pai'>
+      <div className='status'>
+        
+          <div className='pesquisa'>
+            <input onChange={(e)=>setTxtPokemon(e.target.value)} placeholder="Pesquise Um Pokémon"/>
+            <button onClick={()=>buscaPokemon()}><i className="fa-solid fa-magnifying-glass"></i></button>
+          </div>
 
-      <ToastContainer
-        position="top-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+          {pokemonSelecionado ? (<div className='propriedades'>
+            <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/"+(1)+".gif"}/>
 
-		{
-      pokemons.map((pokemon) => 
-      {
-        let id;
-        if(pokemon.url){
-          const PokemonURL = "https://pokeapi.co/api/v2/pokemon/"
-          id = pokemon.url.replace(PokemonURL, "").replace("/", "")
-        }
-        else {
-          id = pokemon.id
-        }
-        return(
-          <div className="pkmon" key={id}>
-					<p>{pokemon.name}</p>
-					<img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/"+(id)+".gif"}/>
-				</div>
-        )
-      }
-				
-			)
-		}
+          </div>) : null}
+        
+      </div>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          />
+
+        <div className="procura">
+          <h1>PokéDex</h1>
+          {
+            pokemons.map((pokemon) => 
+            {
+              let id;
+              if(pokemon.url){
+                const PokemonURL = "https://pokeapi.co/api/v2/pokemon/"
+                id = pokemon.url.replace(PokemonURL, "").replace("/", "")
+              }
+              else {
+                id = pokemon.id
+              }
+              return(
+                <div className="pkmon" key={id} onClick={()=>mostrarPk(pokemon.url)}>
+                  <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/"+(id)+".gif"}/>
+                  <p>{pokemon.name}</p>
+                  <p>N°</p>
+                </div>
+              )
+            }
+              
+            )
+          }
+          </div>
     </div>
   );
 }
