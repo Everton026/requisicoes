@@ -30,7 +30,7 @@ function App() {
 		// pokemon 			-> busca todos pokemons
 		// pokemon?limit=X  -> busca todos com um numero limite
 		// pokemon/nome 	-> busca um pokemon específico
-		axios.get("https://pokeapi.co/api/v2/pokemon?limit=500")
+		axios.get("https://pokeapi.co/api/v2/pokemon?limit=25")
 		.then(response => { // Será executado quando a requisição terminar
 			console.log("Requisição bem sucedida!");
 			setPokemons(response.data.results);
@@ -48,19 +48,20 @@ function App() {
   function mostrarPk(url) {
     setPokSelecionado(url)
   }
-
+  
   function buscaPokemonsSelecionado() {
     if(!pokemonSelecionado) return;
     axios.get(pokemonSelecionado)
     .then((response) => {
       console.log("Requisição bem sucedida!", response.data);
+      setPokSelecionado(response.data);
     })
     .catch((response) => {
       console.log("Deu ruim na requisição");
       console.log(response);
     });
   }
-
+  
   React.useEffect(() => {
     buscaPokemonsSelecionado();
   },[buscaPokemonsSelecionado]);
@@ -75,7 +76,7 @@ function App() {
           </div>
 
           {pokemonSelecionado ? (<div className='propriedades'>
-            <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/.gif"}/>
+            <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/"+{id}+".gif"}/>
 
           </div>) : null}
         
