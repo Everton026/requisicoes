@@ -12,6 +12,7 @@ body {
     color: #f5f5f5;
     background-color: #fff;
     background-image: url("/public/assets/pokeball-icon.png");
+    background-position: right;
     background-repeat: no-repeat;
 }
 .pai {
@@ -102,7 +103,4 @@ body {
     transform: scale3d(1.1);
     border: 2px solid #4b204b;
     cursor: pointer;
-}
-.propriedades {
-
 }

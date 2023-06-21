@@ -10,7 +10,6 @@ function App() {
 	const [txtPokemon, setTxtPokemon] = useState("");
   const [pokemonSelecionado, setPokSelecionado] = useState(null)
 
-
 	function buscaPokemon(){
     if(!txtPokemon.trim()){
       toast("Digite o Nome de um Pokémon!")
@@ -49,6 +48,22 @@ function App() {
   function mostrarPk(url) {
     setPokSelecionado(url)
   }
+
+  function buscaPokemonsSelecionado() {
+    if(!pokemonSelecionado) return;
+    axios.get(pokemonSelecionado)
+    .then((response) => {
+      console.log("Requisição bem sucedida!", response.data);
+    })
+    .catch((response) => {
+      console.log("Deu ruim na requisição");
+      console.log(response);
+    });
+  }
+
+  React.useEffect(() => {
+    buscaPokemonsSelecionado();
+  },[buscaPokemonsSelecionado]);
  
   return (
     <div className='pai'>
@@ -60,7 +75,7 @@ function App() {
           </div>
 
           {pokemonSelecionado ? (<div className='propriedades'>
-            <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/"+(1)+".gif"}/>
+            <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/.gif"}/>
 
           </div>) : null}
         
