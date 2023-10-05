@@ -36,12 +36,18 @@ function App() {
             console.log("Requisição bem sucedida!", response.data)
             setTiposPokemon(response.data.types)
             
-            const tipos = response.data.types.map((tipo) => type.type.name);
+            const tipos = response.data.types.map((tipo) => tipo.type.name);
+            let tipoCssClass = "";
+
             if(tipos.includes("grass")){
-                setTipoBackground("red");
+                tipoCssClass = "tipo-grama"
+            } else if(tipos.includes("fire")) {
+                tipoCssClass = "tipo-fogo"
             } else {
-                setTipoBackground("")
+                tipoCssClass = ""
             }
+
+            setTipoBackground(tipoCssClass)
         })
         .catch((error) => {
             console.log("Deu ruim na requisição", error)
@@ -106,14 +112,14 @@ function App() {
         </div>
 
         {pokemonSelecionado ? (
-          <div className="propriedades" style={{background: tipoBackground}}>
+          <div className="propriedades">
             <h1>{pokemonSelecionado.name}</h1>
             <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonSelecionado.id}.gif`} alt={pokemonSelecionado.name}/>
             <p>N° {pokemonSelecionado.id}</p>
             <p>Tipos:</p>
             <ul className="tipos">
                 {tiposPokemon.map((tipo, index) => (
-                <p key={index}>{tipo.type.name}</p>
+                <p className={`tipo ${tipoBackground}`}  key={index}>{tipo.type.name}</p>
                 ))}
             </ul>
           </div>
