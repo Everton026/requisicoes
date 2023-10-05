@@ -40,11 +40,13 @@ function App() {
             let tipoCssClass = "";
 
             if(tipos.includes("grass")){
-                tipoCssClass = "tipo-grama"
+                tipoCssClass = "grama"
             } else if(tipos.includes("fire")) {
-                tipoCssClass = "tipo-fogo"
-            } else {
-                tipoCssClass = ""
+                tipoCssClass = "fogo"
+            } else if(tipos.includes("flying")){
+                tipoCssClass = "dragao"
+            } else if(tipos.includes("poison")){
+              tipoCssClass = "toxico"
             }
 
             setTipoBackground(tipoCssClass)
@@ -119,7 +121,7 @@ function App() {
             <p>Tipos:</p>
             <ul className="tipos">
                 {tiposPokemon.map((tipo, index) => (
-                <p className={`tipo ${tipoBackground}`}  key={index}>{tipo.type.name}</p>
+                <p className={`tipo ${tipoBackground} texto-redondo`}  key={index}>{tipo.type.name}</p>
                 ))}
             </ul>
           </div>

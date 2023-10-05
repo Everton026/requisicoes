@@ -44,9 +44,10 @@ body {
     display: flex;
     flex-direction: row;
     gap: 40px;
-    color: #222;
+    color: #fff;
     padding: 10px;
     border-radius: 50px;
+    font-size: 18px;
 }
 .status {
     grid-area: status;
@@ -132,9 +133,17 @@ body {
     border: 2px solid #4b204b;
     cursor: pointer;
 }
-.tipo-fogo {
-    background-color: red;
+.texto-redondo {
+    border-radius: 7%;
 }
-.tipo-grama {
+.fogo {
+    background-color: red;
+    padding: 5px;
+}
+.grama {
     background-color: green;
+    padding: 5px;
+}
+.dragao {
+    background-color: cyan;
 }
