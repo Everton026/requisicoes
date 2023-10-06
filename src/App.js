@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { type } from "@testing-library/user-event/dist/type";
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
@@ -11,50 +10,72 @@ function App() {
   const [pokemonSelecionado, setPokSelecionado] = useState(null);
   const [tiposPokemon, setTiposPokemon] = useState([]);
   const [tipoBackground, setTipoBackground] = useState("");
+  const [isHovered, setIsHovered] = useState(null)
+
+  const tipoCor = {
+    normal: "normal",
+    fire: "fogo",
+    water: "agua",
+    grass: "grama",
+    flying: "voador",
+    fighting: "lutador",
+    poison: "veneno",
+    eletric: "eletrico",
+    ground: "terra",
+    rock: "pedra",
+    psychic: "psiquico",
+    ice: "gelo",
+    bug: "inseto",
+    ghost: "fantasma",
+    steel: "ferro",
+    dragon: "dragao",
+    dark: "sombrio",
+    fairy: "fada",
+  };
 
   function buscaPokemon() {
     if (!txtPokemon.trim()) {
       toast("Digite o Nome de um Pokémon!");
       buscaTodosPokemons();
+      setPokSelecionado(null);
       return;
     }
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${txtPokemon}`)
       .then((resposta) => {
+        const tipos = resposta.data.types.map((tipo) => tipo.type.name);
+        setPokSelecionado(resposta.data);
+        setTiposPokemon(tipos);
         setPokemons([resposta.data]);
         toast("✔ Pokemon Encontrado!");
       })
       .catch((resposta) => {
         toast("❌ Pokémon Não Encontrado!");
+        setTiposPokemon([]);
       });
   }
 
   function buscaPropriedades(url) {
     axios
-        .get(url)
-        .then((response) => {
-            console.log("Requisição bem sucedida!", response.data)
-            setTiposPokemon(response.data.types)
-            
-            const tipos = response.data.types.map((tipo) => tipo.type.name);
-            let tipoCssClass = "";
+      .get(url)
+      .then((response) => {
+        console.log("Requisição bem sucedida!", response.data);
+        const tipos = response.data.types.map((tipo) => tipo.type.name);
 
-            if(tipos.includes("grass")){
-                tipoCssClass = "grama"
-            } else if(tipos.includes("fire")) {
-                tipoCssClass = "fogo"
-            } else if(tipos.includes("flying")){
-                tipoCssClass = "dragao"
-            } else if(tipos.includes("poison")){
-              tipoCssClass = "toxico"
-            }
+        const tiposBackground = {};
+        tipos.forEach((tipo) => {
+          if (tipoCor[tipo]) {
+            tiposBackground[tipo] = tipoCor[tipo];
+          }
+        });
 
-            setTipoBackground(tipoCssClass)
-        })
-        .catch((error) => {
-            console.log("Deu ruim na requisição", error)
-            setTiposPokemon([])
-        })
+        setTiposPokemon(tipos);
+        setTipoBackground(tiposBackground);
+      })
+      .catch((error) => {
+        console.log("Deu ruim na requisição", error);
+        setTiposPokemon([]);
+      });
   }
 
   function buscaTodosPokemons() {
@@ -82,7 +103,7 @@ function App() {
 
   function mostrarPk(url) {
     setPokSelecionado(url);
-    buscaPropriedades(url)
+    buscaPropriedades(url);
   }
 
   function buscaPokemonsSelecionado() {
@@ -106,27 +127,61 @@ function App() {
   return (
     <div className="pai">
       <div className="status">
+        {pokemonSelecionado ? (
+          <div className="propriedades">
+            <img
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonSelecionado.id}.gif`}
+              alt={pokemonSelecionado.name}
+            />
+            <h1>{pokemonSelecionado.name}</h1>
+            <h2>N° {pokemonSelecionado.id}</h2>
+            <ul className="tipos">
+              {tiposPokemon.map((tipo, index) => (
+                <p key={index} className={`tipo ${tipo} texto-redondo`}>
+                  {tipo}
+                </p>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+      <div className="procura">
         <div className="pesquisa">
-          <input onChange={(e) => setTxtPokemon(e.target.value)} placeholder="Pesquise Um Pokémon"/>
+          <input
+            onChange={(e) => setTxtPokemon(e.target.value)}
+            placeholder="Pesquise Por Um Pokémon"
+          />
           <button onClick={() => buscaPokemon()}>
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
+        <div className="resultado">
+          {pokemons.map((pokemon, index) => {
+            let id;
+            if (pokemon.url) {
+              const PokemonURL = "https://pokeapi.co/api/v2/pokemon/";
+              id = pokemon.url.replace(PokemonURL, "").replace("/", "");
+            } else {
+              id = pokemon.id;
+            }
 
-        {pokemonSelecionado ? (
-          <div className="propriedades">
-            <h1>{pokemonSelecionado.name}</h1>
-            <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonSelecionado.id}.gif`} alt={pokemonSelecionado.name}/>
-            <p>N° {pokemonSelecionado.id}</p>
-            <p>Tipos:</p>
-            <ul className="tipos">
-                {tiposPokemon.map((tipo, index) => (
-                <p className={`tipo ${tipoBackground} texto-redondo`}  key={index}>{tipo.type.name}</p>
-                ))}
-            </ul>
-          </div>
-        ) : null}
-
+            axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+            .then((response) => {
+              const tipos = response.data.types.map((tipo) => tipo.type.name);
+            })
+            .catch((error) => {
+              console.error("Erro ao buscar informações do Pokémon:", error);
+            });
+            return (
+              <div className="pkmon" key={id} onClick={() => mostrarPk(pokemon.url)}>
+                <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png"}/>
+                <p>{pokemon.name}</p>
+                <p>N°{id}</p>
+                <p></p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <ToastContainer
@@ -142,25 +197,6 @@ function App() {
         theme="dark"
       />
 
-      <div className="procura">
-        <h1>PokéDex</h1>
-        {pokemons.map((pokemon) => {
-          let id;
-          if (pokemon.url) {
-            const PokemonURL = "https://pokeapi.co/api/v2/pokemon/";
-            id = pokemon.url.replace(PokemonURL, "").replace("/", "");
-          } else {
-            id = pokemon.id;
-          }
-          return (
-            <div className="pkmon" key={id} onClick={() => mostrarPk(pokemon.url)}>
-              <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/" + id + ".gif"}/>
-              <p>{pokemon.name}</p>
-              <p>N°{id}</p>
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 }
