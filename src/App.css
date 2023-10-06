@@ -10,9 +10,9 @@
 }
 body {
   color: #ede7e7;
-  background-color: #fff;
+  background-color: #ede7e7;
   background-image: url("/public/assets/pokeball-icon.png");
-  background-position: right;
+  background-position: left;
   background-repeat: no-repeat;
 }
 .pai {
@@ -29,7 +29,6 @@ body {
   text-align: center;
   align-items: center;
   color: #1c1a19;
-  background-color: #d0d0d0;
   border-radius: 20px;
   margin: 2% auto;
   padding: 15%;
@@ -42,7 +41,7 @@ body {
   font-size: 35px;
 }
 .propriedades h2 {
-  color: #8f9396;
+  color: #1c1a19;
   font-size: 17px;
   font-weight: bold;
 }
@@ -176,7 +175,7 @@ body {
   padding: 4px 10px 4px 10px;
 }
 .grass {
-  background-color: green;
+  background-color: #78c850;
   padding: 4px 10px 4px 10px;
 }
 .flying {
@@ -234,4 +233,55 @@ body {
 .fairy {
   background-color: #ffacff;
   padding: 4px 10px 4px 10px;
+}
+.bg-normal {
+  background-image: linear-gradient(to right, #a8a878, #1c1a19);
+}
+.bg-fire {
+  background-image: linear-gradient(to right, #f05030, #1c1a19);
+}
+.bg-water {
+  background-image: linear-gradient(to right, #6890f0, #1c1a19);
+}
+.bg-grass {
+  background-image: linear-gradient(to right, #78c850, #1c1a19);
+}
+.bg-flying {
+  background-image: linear-gradient(to right, #a890f0, #1c1a19);
+}
+.bg-fighting {
+  background-image: linear-gradient(to right, #903028, #1c1a19);
+}
+.bg-poison {
+  background-image: linear-gradient(to right, #a040a0, #1c1a19);
+}
+.bg-electric {
+  background-image: linear-gradient(to right, #f8d030, #1c1a19);
+}
+.bg-ground {
+  background-image: linear-gradient(to right, #e0c068, #1c1a19);
+}
+.bg-rock {
+  background-image: linear-gradient(to right, #b8a038, #1c1a19);
+}
+.bg-psychic {
+  background-image: linear-gradient(to right, #f85888, #1c1a19);
+}
+.bg-ice {
+  background-image: linear-gradient(to right, #98d8d8, #1c1a19);
+}
+.bg-bug {
+  background-image: linear-gradient(to right, #abbc1c, #1c1a19);
+}
+.bg-steel {
+  background-image: linear-gradient(to right, #b8b8d0, #1c1a19);
+}
+.bg-dragon {
+  background-image: linear-gradient(to right, #705898, #1c1a19);
+}
+.bg-dark {
+  background-image: linear-gradient(to right, #705848, #1c1a19);
+}
+.bg-fairy {
+  background-image: linear-gradient(to right, #ffacff, #1c1a19);
 }

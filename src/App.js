@@ -1,5 +1,5 @@
 import { ToastContainer, toast } from "react-toastify";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +10,8 @@ function App() {
   const [pokemonSelecionado, setPokSelecionado] = useState(null);
   const [tiposPokemon, setTiposPokemon] = useState([]);
   const [tipoBackground, setTipoBackground] = useState("");
-  const [isHovered, setIsHovered] = useState(null)
+  const [habilidade, setHabilidade] = useState([]);
+  const [movimento, setMovimento] = useState([]);
 
   const tipoCor = {
     normal: "normal",
@@ -40,6 +41,7 @@ function App() {
       setPokSelecionado(null);
       return;
     }
+
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${txtPokemon}`)
       .then((resposta) => {
@@ -48,6 +50,73 @@ function App() {
         setTiposPokemon(tipos);
         setPokemons([resposta.data]);
         toast("✔ Pokemon Encontrado!");
+
+        const tiposBackground = {};
+        tipos.forEach((tipo) => {
+          if (tipoCor[tipo]) {
+            tiposBackground[tipo] = tipoCor[tipo];
+          }
+        });
+
+        const body = document.body;
+        body.classList.remove(
+          "bg-normal",
+          "bg-fire",
+          "bg-water",
+          "bg-grass",
+          "bg-flying",
+          "bg-fighting",
+          "bg-poison",
+          "bg-electric",
+          "bg-ground",
+          "bg-rock",
+          "bg-psychic",
+          "bg-ice",
+          "bg-bug",
+          "bg-ghost",
+          "bg-steel",
+          "bg-dragon",
+          "bg-dark",
+          "bg-fairy"
+        );
+
+        if (tipos.includes("normal")) {
+          body.classList.add("bg-normal");
+        } else if (tipos.includes("fire")) {
+          body.classList.add("bg-fire");
+        } else if (tipos.includes("water")) {
+          body.classList.add("bg-water");
+        } else if (tipos.includes("grass")) {
+          body.classList.add("bg-grass");
+        } else if (tipos.includes("flying")) {
+          body.classList.add("bg-flying");
+        } else if (tipos.includes("fighting")) {
+          body.classList.add("bg-fighting");
+        } else if (tipos.includes("poison")) {
+          body.classList.add("bg-poison");
+        } else if (tipos.includes("electric")) {
+          body.classList.add("bg-electric");
+        } else if (tipos.includes("ground")) {
+          body.classList.add("bg-ground");
+        } else if (tipos.includes("rock")) {
+          body.classList.add("bg-rock");
+        } else if (tipos.includes("psychic")) {
+          body.classList.add("bg-psychic");
+        } else if (tipos.includes("ice")) {
+          body.classList.add("bg-ice");
+        } else if (tipos.includes("bug")) {
+          body.classList.add("bg-bug");
+        } else if (tipos.includes("ghost")) {
+          body.classList.add("bg-ghost");
+        } else if (tipos.includes("steel")) {
+          body.classList.add("bg-steel");
+        } else if (tipos.includes("dragon")) {
+          body.classList.add("bg-dragon");
+        } else if (tipos.includes("dark")) {
+          body.classList.add("bg-dark");
+        } else if (tipos.includes("fairy")) {
+          body.classList.add("bg-fairy");
+        }
       })
       .catch((resposta) => {
         toast("❌ Pokémon Não Encontrado!");
@@ -70,7 +139,67 @@ function App() {
         });
 
         setTiposPokemon(tipos);
-        setTipoBackground(tiposBackground);
+
+        // Após definir os tipos no estado, atualize o background do corpo
+        const body = document.body;
+        body.classList.remove(
+          "bg-normal",
+          "bg-fire",
+          "bg-water",
+          "bg-grass",
+          "bg-flying",
+          "bg-fighting",
+          "bg-poison",
+          "bg-electric",
+          "bg-ground",
+          "bg-rock",
+          "bg-psychic",
+          "bg-ice",
+          "bg-bug",
+          "bg-ghost",
+          "bg-steel",
+          "bg-dragon",
+          "bg-dark",
+          "bg-fairy"
+        );
+
+        if (tipos.includes("normal")) {
+          body.classList.add("bg-normal");
+        } else if (tipos.includes("fire")) {
+          body.classList.add("bg-fire");
+        } else if (tipos.includes("water")) {
+          body.classList.add("bg-water");
+        } else if (tipos.includes("grass")) {
+          body.classList.add("bg-grass");
+        } else if (tipos.includes("flying")) {
+          body.classList.add("bg-flying");
+        } else if (tipos.includes("fighting")) {
+          body.classList.add("bg-fighting");
+        } else if (tipos.includes("poison")) {
+          body.classList.add("bg-poison");
+        } else if (tipos.includes("electric")) {
+          body.classList.add("bg-electric");
+        } else if (tipos.includes("ground")) {
+          body.classList.add("bg-ground");
+        } else if (tipos.includes("rock")) {
+          body.classList.add("bg-rock");
+        } else if (tipos.includes("psychic")) {
+          body.classList.add("bg-psychic");
+        } else if (tipos.includes("ice")) {
+          body.classList.add("bg-ice");
+        } else if (tipos.includes("bug")) {
+          body.classList.add("bg-bug");
+        } else if (tipos.includes("ghost")) {
+          body.classList.add("bg-ghost");
+        } else if (tipos.includes("steel")) {
+          body.classList.add("bg-steel");
+        } else if (tipos.includes("dragon")) {
+          body.classList.add("bg-dragon");
+        } else if (tipos.includes("dark")) {
+          body.classList.add("bg-dark");
+        } else if (tipos.includes("fairy")) {
+          body.classList.add("bg-fairy");
+        }
       })
       .catch((error) => {
         console.log("Deu ruim na requisição", error);
@@ -78,20 +207,35 @@ function App() {
       });
   }
 
+  function buscaHabilidadesEMovimentos(url) {
+    axios
+      .get(url)
+      .then((response) => {
+        const habilidades = response.data.abilities.map(
+          (habilidade) => habilidade.ability.name
+        );
+
+        const movimentos = response.data.moves.map(
+          (movimento) => movimento.move.name
+        );
+
+        setHabilidade(habilidades);
+        setMovimento(movimentos);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar habilidades e movimentos: ", error);
+      });
+  }
+
   function buscaTodosPokemons() {
-    // pokemon 			-> busca todos pokemons
-    // pokemon?limit=X  -> busca todos com um numero limite
-    // pokemon/nome 	-> busca um pokemon específico
     axios
       .get("https://pokeapi.co/api/v2/pokemon?limit=25")
       .then((response) => {
-        // Será executado quando a requisição terminar
         console.log("Requisição bem sucedida!");
         setPokemons(response.data.results);
         console.log(response);
       })
       .catch((response) => {
-        // É executado quando dá erro na requisição
         console.log("Deu ruim na requisição");
         console.log(response);
       });
@@ -104,6 +248,37 @@ function App() {
   function mostrarPk(url) {
     setPokSelecionado(url);
     buscaPropriedades(url);
+    buscaHabilidadesEMovimentos(url);
+
+    const tipos = tiposPokemon.map((tipo) => tipo.type.name);
+    const body = document.body;
+
+    body.classList.remove(
+      "bg-normal",
+      "bg-fire",
+      "bg-water",
+      "bg-grass",
+      "bg-flying",
+      "bg-fighting",
+      "bg-poison",
+      "bg-electric",
+      "bg-ground",
+      "bg-rock",
+      "bg-psychic",
+      "bg-ice",
+      "bg-bug",
+      "bg-ghost",
+      "bg-steel",
+      "bg-dragon",
+      "bg-dark",
+      "bg-fairy"
+    );
+
+    tipos.forEach((tipo) => {
+      if (tipoCor[tipo]) {
+        body.classList.add(`bg-${tipoCor[tipo]}`);
+      }
+    });
   }
 
   function buscaPokemonsSelecionado() {
@@ -142,6 +317,16 @@ function App() {
                 </p>
               ))}
             </ul>
+            <ul>
+              {habilidade.map((habilidade, index) => (
+                <p key={index}>{habilidade}</p>
+              ))}
+            </ul>
+            <ul>
+              {movimento.map((movimento, index) => (
+                <li key={index}>{movimento}</li>
+              ))}
+            </ul>
           </div>
         ) : null}
       </div>
@@ -164,20 +349,21 @@ function App() {
             } else {
               id = pokemon.id;
             }
-
-            axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
-            .then((response) => {
-              const tipos = response.data.types.map((tipo) => tipo.type.name);
-            })
-            .catch((error) => {
-              console.error("Erro ao buscar informações do Pokémon:", error);
-            });
             return (
-              <div className="pkmon" key={id} onClick={() => mostrarPk(pokemon.url)}>
-                <img src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png"}/>
+              <div
+                className="pkmon"
+                key={id}
+                onClick={() => mostrarPk(pokemon.url)}
+              >
+                <img
+                  src={
+                    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" +
+                    id +
+                    ".png"
+                  }
+                />
                 <p>{pokemon.name}</p>
                 <p>N°{id}</p>
-                <p></p>
               </div>
             );
           })}
@@ -196,7 +382,6 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-
     </div>
   );
 }
