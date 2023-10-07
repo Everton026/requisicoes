@@ -3,3 +3,6 @@
 [0616/191413.181:ERROR:(-1)] Check failed: false. 
 [0620/190813.901:ERROR:(-1)] Check failed: false. 
 [1005/204403.897:ERROR:check.cc(298)] Check failed: false. NOTREACHED log messages are omitted in official builds. Sorry!
+[1006/183851.320:ERROR:check.cc(298)] Check failed: false. NOTREACHED log messages are omitted in official builds. Sorry!
+[1006/190207.321:ERROR:check.cc(298)] Check failed: false. NOTREACHED log messages are omitted in official builds. Sorry!
+[1006/233518.619:ERROR:check.cc(298)] Check failed: false. NOTREACHED log messages are omitted in official builds. Sorry!

@@ -10,8 +10,6 @@ function App() {
   const [pokemonSelecionado, setPokSelecionado] = useState(null);
   const [tiposPokemon, setTiposPokemon] = useState([]);
   const [tipoBackground, setTipoBackground] = useState("");
-  const [habilidade, setHabilidade] = useState([]);
-  const [movimento, setMovimento] = useState([]);
 
   const tipoCor = {
     normal: "normal",
@@ -130,17 +128,17 @@ function App() {
       .then((response) => {
         console.log("Requisição bem sucedida!", response.data);
         const tipos = response.data.types.map((tipo) => tipo.type.name);
-
+  
         const tiposBackground = {};
         tipos.forEach((tipo) => {
           if (tipoCor[tipo]) {
             tiposBackground[tipo] = tipoCor[tipo];
           }
         });
-
+  
         setTiposPokemon(tipos);
-
-        // Após definir os tipos no estado, atualize o background do corpo
+  
+        // Agora, após atualizar o estado tiposPokemon, atualize o background do corpo
         const body = document.body;
         body.classList.remove(
           "bg-normal",
@@ -162,7 +160,7 @@ function App() {
           "bg-dark",
           "bg-fairy"
         );
-
+  
         if (tipos.includes("normal")) {
           body.classList.add("bg-normal");
         } else if (tipos.includes("fire")) {
@@ -207,33 +205,13 @@ function App() {
       });
   }
 
-  function buscaHabilidadesEMovimentos(url) {
-    axios
-      .get(url)
-      .then((response) => {
-        const habilidades = response.data.abilities.map(
-          (habilidade) => habilidade.ability.name
-        );
-
-        const movimentos = response.data.moves.map(
-          (movimento) => movimento.move.name
-        );
-
-        setHabilidade(habilidades);
-        setMovimento(movimentos);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar habilidades e movimentos: ", error);
-      });
-  }
-
   function buscaTodosPokemons() {
     axios
       .get("https://pokeapi.co/api/v2/pokemon?limit=25")
       .then((response) => {
-        console.log("Requisição bem sucedida!");
+        //console.log("Requisição bem sucedida!");
         setPokemons(response.data.results);
-        console.log(response);
+        //console.log(response);
       })
       .catch((response) => {
         console.log("Deu ruim na requisição");
@@ -248,41 +226,12 @@ function App() {
   function mostrarPk(url) {
     setPokSelecionado(url);
     buscaPropriedades(url);
-    buscaHabilidadesEMovimentos(url);
-
-    const tipos = tiposPokemon.map((tipo) => tipo.type.name);
-    const body = document.body;
-
-    body.classList.remove(
-      "bg-normal",
-      "bg-fire",
-      "bg-water",
-      "bg-grass",
-      "bg-flying",
-      "bg-fighting",
-      "bg-poison",
-      "bg-electric",
-      "bg-ground",
-      "bg-rock",
-      "bg-psychic",
-      "bg-ice",
-      "bg-bug",
-      "bg-ghost",
-      "bg-steel",
-      "bg-dragon",
-      "bg-dark",
-      "bg-fairy"
-    );
-
-    tipos.forEach((tipo) => {
-      if (tipoCor[tipo]) {
-        body.classList.add(`bg-${tipoCor[tipo]}`);
-      }
-    });
   }
 
-  function buscaPokemonsSelecionado() {
+
+  React.useEffect(() => {
     if (!pokemonSelecionado) return;
+
     axios
       .get(pokemonSelecionado)
       .then((response) => {
@@ -293,11 +242,7 @@ function App() {
         console.log("Deu ruim na requisição");
         console.log(response);
       });
-  }
-
-  React.useEffect(() => {
-    buscaPokemonsSelecionado();
-  }, [buscaPokemonsSelecionado]);
+  }, [pokemonSelecionado]);
 
   return (
     <div className="pai">
@@ -315,16 +260,6 @@ function App() {
                 <p key={index} className={`tipo ${tipo} texto-redondo`}>
                   {tipo}
                 </p>
-              ))}
-            </ul>
-            <ul>
-              {habilidade.map((habilidade, index) => (
-                <p key={index}>{habilidade}</p>
-              ))}
-            </ul>
-            <ul>
-              {movimento.map((movimento, index) => (
-                <li key={index}>{movimento}</li>
               ))}
             </ul>
           </div>
